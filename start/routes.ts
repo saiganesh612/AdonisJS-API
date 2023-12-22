@@ -24,6 +24,4 @@ Route.get('/', async () => {
   return { hello: 'world' }
 })
 
-Route.get('/my-name', () => {
-  return { myName: 'Sai Ganesh' }
-})
+Route.resource('/features', 'HeadshotDB/FeaturesController').apiOnly()
