@@ -24,4 +24,22 @@ Route.get('/', async () => {
   return { hello: 'world' }
 })
 
-Route.resource('/features', 'HeadshotDB/FeaturesController').apiOnly()
+Route.group(() => {
+  // Feature table routes
+  Route.group(() => {
+    Route.get('/', 'HeadshotDB/FeaturesController.index')
+    Route.post('/', 'HeadshotDB/FeaturesController.store')
+    Route.get('/:id', 'HeadshotDB/FeaturesController.show').as('feature.show')
+    Route.put('/:id', 'HeadshotDB/FeaturesController.update').as('feature.update')
+    Route.delete('/:id', 'HeadshotDB/FeaturesController.destroy').as('feature.delete')
+  })
+    .prefix('features')
+    .middleware('auth')
+
+  // Auth Routes
+  Route.group(() => {
+    Route.post('/register', 'Auth/AuthController.register').as('auth.register')
+    Route.post('/login', 'Auth/AuthController.login').as('auth.login')
+    Route.get('/logout', 'Auth/AuthController.logout').as('auth.logout')
+  }).prefix('/auth')
+}).prefix('/api')
